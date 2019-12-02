@@ -8,6 +8,12 @@ const app = express();
 //to  to a json end point that displays the message and when we save the nodemon will refresh the server clear
 app.get('/', (req, res)=> res.json({msg: 'Welcome to the Contact Manager API...'}));
 
+//Define our routes
+app.use('/api/users', require('./routes/users'));
+app.use('/api/auth', require('./routes/auth'));
+app.use('/api/contacts', require('./routes/contacts'));
+
+
 // process.env.PORT (it will look for envirnmoment varialbe)is used for production but when we do local
 // developement port 5000 will be used 
 const PORT = process.env.PORT || 5000; 
