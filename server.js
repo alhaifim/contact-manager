@@ -1,9 +1,14 @@
 //making a basic express server.  Please note we can not use import as we are not currenlty using react and ECMA 2015.  
 // what we use now is called common js
 const express = require('express');
+const connectDB = require('./config/db');
+
 
 // initialize express into a variable called APP
 const app = express();
+
+// connect to data base 
+connectDB();
 // adding a get route to the / home page which has an arrow function with a request and response object
 //to  to a json end point that displays the message and when we save the nodemon will refresh the server clear
 app.get('/', (req, res)=> res.json({msg: 'Welcome to the Contact Manager API...'}));
