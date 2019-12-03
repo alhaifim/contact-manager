@@ -9,6 +9,9 @@ const app = express();
 
 // connect to data base 
 connectDB();
+
+//Init Middleware
+app.use(express.json({extended: false}));   // by doing this now we can accept data.  this is added so that the req.body work in the users.js
 // adding a get route to the / home page which has an arrow function with a request and response object
 //to  to a json end point that displays the message and when we save the nodemon will refresh the server clear
 app.get('/', (req, res)=> res.json({msg: 'Welcome to the Contact Manager API...'}));
