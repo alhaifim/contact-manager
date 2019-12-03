@@ -1,6 +1,7 @@
 // we need to bring express to be able to use the router
 const express = require('express');
 const router = express.Router();
+const bcrypt = require('bcryptjs');
 const { check, validationResult } = require('express-validator');
 const User = require('../models/User');
 // we are using post request as we are submiting data to the server and we do not want to show it
@@ -12,18 +13,42 @@ check('name', 'Please add name')
     .not()
     .isEmpty(),   // the above two lines are to check that the field is not empty
 check('email', 'Please include a valid email').isEmail(),
-check('password', 'please enter a password with 6 or more characters').isLength({min: 6}).isAlphanumeric()
+check('password', 'please enter a password with 6 or more characters').isLength({min: 6})
 // the above code checks the code in the body. 
 ],
 
-(req, res)=>{
+async (req, res)=>{
     const errors = validationResult(req);  // creating a const to store the errors.  this is only for routes that accept and validate data
     if(!errors.isEmpty()){
         return res.status(400).json({errors:  errors.array()});    // the 400 is bad request error code 
     }
-    res.send('passed');    // this will give the data that is sent to the route -- fields that are used to register. And in order
     // to use req.body we have to add a middleware in the server.js 
-}); // which means it will goto api/user
+    // which means it will goto api/user
+const {name, email, password} = req.body;   // req.body should have a name and password and here we destructured them to req.body
+
+    try{
+        // check if there is a user already registered with the email
+        let user = await  User.findOne({email});            // in order to make await you need async in the top.  findOne is a mangoose function
+                                                    // that will find a user based on a field 
+        if(user){
+            return res.status(400).json({msg: 'User already exists'});
+        }
+
+        user = new User({name, email, password});
+
+        // now we need to has the password. we will create a variable called salt and we will used bcrypt we installed at the begining
+        const salt = await bcrypt.genSalt(10); // 10 is the default and means 10 rounds of 
+        user.password = await bcrypt.hash(password, salt);
+
+        await user.save();
+
+        res.send('User Saved');
+
+    }catch(err){
+        console.error(err.message);
+        res.status(500).send('Server Error');
+    }
+}); 
 
 // export the router
 module.exports = router;
