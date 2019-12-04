@@ -4,6 +4,8 @@ const router = express.Router();
 const bcrypt = require('bcryptjs');
 const { check, validationResult } = require('express-validator');
 const User = require('../models/User');
+const config = require('config');
+const jwt = require('jsonwebtoken'); // it was installed at the begining 
 // we are using post request as we are submiting data to the server and we do not want to show it
 // @route       POST api/users
 // desc         Register a user
@@ -41,8 +43,20 @@ const {name, email, password} = req.body;   // req.body should have a name and p
         user.password = await bcrypt.hash(password, salt);
 
         await user.save();
-
-        res.send('User Saved');
+        // payload is the object we are sending in the jwt token 
+        const payload = {
+            user: {
+                id: user.id
+            }
+        }
+        // to generate a token we have to sign it. it should have the payload and seceret passed to it.  the secret is created in the config file
+        jwt.sign(payload, config.get('jwtSecret'), { // the other parameter is an object of options
+        expiresIn: 360000
+        }, (err, token) => {
+            if(err) throw err; // if there is an error it will through an error otherwise we just pass the token
+            res.json({token});
+        }
+        ); 
 
     }catch(err){
         console.error(err.message);
