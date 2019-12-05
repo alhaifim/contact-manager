@@ -65,8 +65,35 @@ router.post('/', [auth,
 // @route       PUT api/contacts/:id         //to find whatever contact we need to update
 // desc         Update Contact
 // @ access     private 
-router.put('/:id', (req, res)=>{
-    res.send('Update Contact');
+router.put('/:id', auth, async (req, res)=>{
+    const {name, email, phone, type} = req.body;
+    // build contact object based on the field that are submitted to check if they are submitted
+    const contactFields ={};
+    if(name) contactFields.name = name;
+    if(email) contactFields.email = email;
+    if(phone) contactFields.phone = phone;
+    if(type) contactFields.type = type;
+   
+    try{
+        let contact = await Contact.findById(req.params.id);  // we use req.params.id to find this
+        if(!contact) return res.status(404).json({msg: 'Contact Not Found'});
+        // Make usre user owns contact
+        if(contact.user.toString() !== req.user.id) {
+            return res.status(401).json({msg:'Not authorized'});
+        }
+        contact = await Contact.findByIdAndUpdate(req.params.id,
+            {$set: contactFields},
+            {new: true} // if the contact does not exists, then add it
+            );
+            res.json(contact);
+
+
+    }catch(err){
+        console.error(err.message);
+        res.status(500).send('Server Error');
+
+    }
+
 }); 
 
 // @route       DELETE api/contacts/:id         //to find whatever contact we need to DELETE
