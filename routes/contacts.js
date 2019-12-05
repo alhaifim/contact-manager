@@ -28,8 +28,38 @@ router.get('/', auth, async (req, res)=>{  // this should at least get an empty 
 // @route       POST api/contacts
 // desc         Add new contact
 // @ access     private 
-router.post('/', (req, res)=>{
-    res.send('Add Contact');
+router.post('/', [auth, 
+    [ // auth and check has to be a second parameter and that is why we need to open a second []
+    check('name', 'Name is required') // we are only validating the name here
+        .not()
+        .isEmpty()
+    ]
+], async (req, res)=>{ 
+    //now we check for errors and send repsonse
+    const errors = validationResult(req);  // creating a const to store the errors.  this is only for routes that accept and validate data
+    if(!errors.isEmpty()){
+        return res.status(400).json({errors:  errors.array()});    // the 400 is bad request error code 
+    }
+    const {name, email, phone, type} = req.body;    // now pulling the data from the body
+    try{
+        const newContact = new Contact ({
+            name, 
+            email,
+            phone,
+            type,
+            user: req.user.id
+        });
+    
+        const contact = await newContact.save();
+        res.json(contact);
+    }
+        catch(err){
+            console.error(err.message);
+            res.status(500).send('Server Error');
+
+        }
+
+    
 }); 
 
 // @route       PUT api/contacts/:id         //to find whatever contact we need to update
