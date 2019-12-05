@@ -6,12 +6,22 @@ const { check, validationResult } = require('express-validator');
 const config = require('config');
 const jwt = require('jsonwebtoken'); // it was installed at the begining 
 const User = require('../models/User');
+const auth = require('../middleware/auth'); // we pass it as a second parameter to the protected route
 
 // @route       GET api/auth  
 // desc         to get the logged in user
 // @ access     Private     // as we are getting a user that is logged in
-router.get('/', (req, res)=>{
-    res.send('Get Logged in user');
+router.get('/', auth, async (req, res)=>{  // if we check at postman to access this route
+    try{
+        // get user from the database
+        const user = await User.findById(req.user.id).select('-password')   // this is a mangoose method that return a promise and 
+        res.json(user);                                                    //-password not to return a password
+
+    }catch(err){
+        console.error(err.message);
+        res.status(500).send('Server Error');
+
+    }
 }); 
 
 
