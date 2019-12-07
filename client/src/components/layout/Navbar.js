@@ -29,8 +29,8 @@ Navbar.propTypes = {
     icon: PropTypes.string
 }
 Navbar.defaultProps = {
-    title: '          Contacts Manager',
-    icon: 'fas fa-id-card-alt'
+    title: ' Contacts Manager',
+    icon: 'far fa-address-card'
 
 }
 
