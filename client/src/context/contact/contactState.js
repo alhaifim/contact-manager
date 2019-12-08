@@ -59,6 +59,10 @@ const [ state, dispatch]   = useReducer(contactReducer, initialState);
     }
     
     //Delete Contact
+    const deleteContact = id => {
+        dispatch({type: DELETE_CONTACT, payload: id}); // dispatch to reducer.  let's save and go to our reducer 
+
+    }
 
     //Set Current Contact
 
@@ -76,7 +80,8 @@ const [ state, dispatch]   = useReducer(contactReducer, initialState);
         value = {{
             // anything we want to access from other components including states and actions need to go in here
             contacts: state.contacts,
-            addContact
+            addContact, 
+            deleteContact
         }}
         >
         {props.children}

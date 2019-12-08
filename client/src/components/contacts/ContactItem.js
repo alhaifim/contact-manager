@@ -1,10 +1,19 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import PropTypes from 'prop-types';
+import ContactContext from '../../context/contact/contactContext';
 
 
  //contact will be passed as a prop
 const ContactItem = ({contact}) => {
+    // intialize contextcontact as we are importing that
+    const contactContext = useContext(ContactContext); // now bring useContext hook
+    const {deleteContact} = contactContext;   // Pulling deleteContact action through contactContext
     const {id, name, email, phone, type} = contact; // we are pulling that from the contact prop we just passed on
+    
+    const onDelete = () =>{
+        deleteContact(id); // deleteContact is defined in ContactState.js 
+    }
+
     return (
         <div className='card bg-light'>
         <h3 className='text-primary text-left'>
@@ -26,7 +35,7 @@ const ContactItem = ({contact}) => {
         </ul>
         <p>
         <button className="btn btn-dark btn-sm">Edit</button>
-        <button className="btn btn-danger btn-sm">Delete</button>
+        <button className="btn btn-danger btn-sm" onClick={onDelete}>Delete</button>
         </p>
 
         </div>

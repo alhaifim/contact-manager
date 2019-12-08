@@ -19,6 +19,12 @@ import {
               contacts: [...state.contacts, action.payload]  // can't change state as it is immutable, so what we do is we copy it
               // and then add the data we have have in our payload
           }
+          case DELETE_CONTACT:
+              return {
+               ...state,  
+               contacts: state.contacts.filter(contact => contact.id !== action.payload) // filter means 
+               //exclude where contact is not equlal to action.payload
+          }
           default:
               return state;
       }
