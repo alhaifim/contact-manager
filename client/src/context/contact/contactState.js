@@ -1,19 +1,22 @@
-import React, {useReducer} from 'react';
+import React, { useReducer } from 'react';
 import uuid from 'uuid';
 import ContactContext from './contactContext';
 import contactReducer from './contactReducer';
 import {
-    ADD_CONTACT,
-    DELETE_CONTACT,
-    SET_CURRENT,
-    CLEAR_CURRENT,
-    UPDATE_CONTACT,
-    CLEAR_FILTER
+  GET_CONTACTS,
+  ADD_CONTACT,
+  DELETE_CONTACT,
+  SET_CURRENT,
+  CLEAR_CURRENT,
+  UPDATE_CONTACT,
+  FILTER_CONTACTS,
+  CLEAR_CONTACTS,
+  CLEAR_FILTER,
+  CONTACT_ERROR
 } from '../types';
-
 // declare our intial state
 
-const contactState = props => {
+const ContactState = props => {
     const initialState ={
         contacts: [
                     {
@@ -37,14 +40,14 @@ const contactState = props => {
                         name: 'Harry White',
                         email: 'harry@gmail.com',
                         phone: '333-333-3333',
-                        type: 'personal'
+                        type: 'professional'
 
                     }
 
         ]
     };
 // state allows us to access anything in our state and dispatch to send objects to the reducer
-    const [ state, dispatch]   = useReducer(contactReducer, initialState);
+const [ state, dispatch]   = useReducer(contactReducer, initialState);
 
 // now we will be having all of our actions
     //Add Contact
@@ -63,17 +66,17 @@ const contactState = props => {
 
     // now we need to return our provider so that we can wrap our entire application with this context
     return(
-        <contactContext.Provider
+        <ContactContext.Provider
         value = {{
             // anything we want to access from other components including states and actions need to go in here
-            contatcs: state.contacts
+            contacts: state.contacts
 
         }}
         >
-        {props.childern}
-        </contactContext.Provider>
-    )
+        {props.children}
+        </ContactContext.Provider>
+    );
 
 };
 
-export default contactState;
+export default ContactState;

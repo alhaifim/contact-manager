@@ -1,15 +1,15 @@
-import React, {Fragment} from 'react';
-import {BrowserRouter as Router, Route, Switch} from 'react-router-dom';
+import React, { Fragment } from 'react';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import Navbar from './components/layout/Navbar';
 import Home from './components/pages/Home';
 import About from './components/pages/About';
-import contactState from './context/contact/contactState';
+import ContactState from './context/contact/ContactState';
 import './App.css';
 
 
 const App=() => {
   return (
-  <contactState>
+  <ContactState>
   <Router>
   <Fragment>
   <Navbar />
@@ -25,7 +25,7 @@ const App=() => {
   </Router>
  
   
-  </contactState>
+  </ContactState>
 
   );
 }
