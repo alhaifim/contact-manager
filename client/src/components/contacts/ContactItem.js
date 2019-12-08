@@ -7,11 +7,12 @@ import ContactContext from '../../context/contact/contactContext';
 const ContactItem = ({contact}) => {
     // intialize contextcontact as we are importing that
     const contactContext = useContext(ContactContext); // now bring useContext hook
-    const {deleteContact} = contactContext;   // Pulling deleteContact action through contactContext
+    const {deleteContact, setCurrent, clearCurrent} = contactContext;   // Pulling deleteContact, setCurrent action through contactContext
     const {id, name, email, phone, type} = contact; // we are pulling that from the contact prop we just passed on
     
     const onDelete = () =>{
         deleteContact(id); // deleteContact is defined in ContactState.js 
+        clearCurrent();
     }
 
     return (
@@ -34,7 +35,7 @@ const ContactItem = ({contact}) => {
         {phone && (<li> <i className='fas fa-phone'/>{phone}</li>)}
         </ul>
         <p>
-        <button className="btn btn-dark btn-sm">Edit</button>
+        <button className="btn btn-dark btn-sm" onClick={()=> setCurrent(contact)}>Edit</button>
         <button className="btn btn-danger btn-sm" onClick={onDelete}>Delete</button>
         </p>
 

@@ -43,8 +43,9 @@ const ContactState = props => {
                         type: 'professional'
 
                     }
-
-        ]
+        ],
+        // what will happen is when edit is clicked the contact being edited to be stored at current 
+        current: null
     };
 // state allows us to access anything in our state and dispatch to send objects to the reducer
 const [ state, dispatch]   = useReducer(contactReducer, initialState);
@@ -61,12 +62,17 @@ const [ state, dispatch]   = useReducer(contactReducer, initialState);
     //Delete Contact
     const deleteContact = id => {
         dispatch({type: DELETE_CONTACT, payload: id}); // dispatch to reducer.  let's save and go to our reducer 
-
     }
 
     //Set Current Contact
+    const setCurrent = contact => {
+        dispatch({type: SET_CURRENT, payload: contact}); // dispatch to reducer.  let's save and go to our reducer 
+    };
 
     //Clear Current Contact
+        const clearCurrent = () => { // this one does not take any contact and does not send a payload as we want it to be null
+            dispatch({type: CLEAR_CURRENT}); // dispatch to reducer.  let's save and go to our reducer 
+        };
 
     //Update Contact
 
@@ -80,8 +86,11 @@ const [ state, dispatch]   = useReducer(contactReducer, initialState);
         value = {{
             // anything we want to access from other components including states and actions need to go in here
             contacts: state.contacts,
+            current: state.current, // new pice of state 
             addContact, 
-            deleteContact
+            deleteContact,
+            setCurrent,
+            clearCurrent
         }}
         >
         {props.children}

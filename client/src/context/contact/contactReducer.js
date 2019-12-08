@@ -25,6 +25,16 @@ import {
                contacts: state.contacts.filter(contact => contact.id !== action.payload) // filter means 
                //exclude where contact is not equlal to action.payload
           }
+          case SET_CURRENT:
+            return  {
+                  ...state, // we return our current state 
+                  current: action.payload // the entire contact object
+              }
+              case CLEAR_CURRENT:
+            return  {
+                  ...state, // we return our current state 
+                  current: null
+              }
           default:
               return state;
       }
