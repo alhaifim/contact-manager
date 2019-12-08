@@ -49,8 +49,14 @@ const ContactState = props => {
 // state allows us to access anything in our state and dispatch to send objects to the reducer
 const [ state, dispatch]   = useReducer(contactReducer, initialState);
 
-// now we will be having all of our actions
+// now we will be having all of our actions.  Actions will communicate with contact form
+   
     //Add Contact
+    const addContact = contact => {
+        contact.id = uuid.v4();    // this is temp until we connect mongoDB
+        dispatch({type: ADD_CONTACT, payload: contact}); // dispatch to reducer.  let's save and go to our reducer 
+
+    }
     
     //Delete Contact
 
@@ -69,8 +75,8 @@ const [ state, dispatch]   = useReducer(contactReducer, initialState);
         <ContactContext.Provider
         value = {{
             // anything we want to access from other components including states and actions need to go in here
-            contacts: state.contacts
-
+            contacts: state.contacts,
+            addContact
         }}
         >
         {props.children}
