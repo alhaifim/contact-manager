@@ -55,7 +55,7 @@ import {
                         return  {
                               ...state, // we return our current state 
                               filtered: null
-                          }
+                          };
           default:
               return state;
       }

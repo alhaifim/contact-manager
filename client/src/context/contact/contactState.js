@@ -98,13 +98,14 @@ const [ state, dispatch]   = useReducer(contactReducer, initialState);
             contacts: state.contacts,
             current: state.current, // new pice of state 
             filtered: state.filtered,
+            clearFilter,
             addContact, 
             deleteContact,
             setCurrent,
             clearCurrent,
             updateContact,
-            filterContacts,
-            clearFilter
+            filterContacts
+            
         }}
         >
         {props.children}
