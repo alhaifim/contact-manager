@@ -19,6 +19,14 @@ import {
               contacts: [...state.contacts, action.payload]  // can't change state as it is immutable, so what we do is we copy it
               // and then add the data we have have in our payload
           }
+          case UPDATE_CONTACT:
+              return {
+                  ...state,
+                  contacts: state.contacts.map(contact=>
+                    contact.id === action.payload.id ? action.payload: contact)  // loop through the contact and if it matches the id 
+                    // in the paylod then set it to the values in the payload otherwise keep it as is
+
+              };
           case DELETE_CONTACT:
               return {
                ...state,  

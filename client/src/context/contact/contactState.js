@@ -75,6 +75,9 @@ const [ state, dispatch]   = useReducer(contactReducer, initialState);
         };
 
     //Update Contact
+    const updateContact = contact => {
+        dispatch({type: UPDATE_CONTACT, payload: contact}); // dispatch to reducer.  let's save and go to our reducer 
+    };
 
     //Filter Contacts
 
@@ -90,7 +93,8 @@ const [ state, dispatch]   = useReducer(contactReducer, initialState);
             addContact, 
             deleteContact,
             setCurrent,
-            clearCurrent
+            clearCurrent,
+            updateContact
         }}
         >
         {props.children}

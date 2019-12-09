@@ -1,15 +1,34 @@
 //this form will be used to add and update contacts 
-import React, {useState, useContext} from 'react';   // as this is a form we need component level state for each field also we need to bring useContext hook
+// use effect hook will be used so that the when ever there is a value in the current varible it will be mounted
+// useEffect normally memic the life cycle method componentDidMount
+import React, {useState, useContext, useEffect} from 'react';   // as this is a form we need component level state for each field also we need to bring useContext hook
 import ContactContext from '../../context/contact/contactContext';
 
 const ContactForm = () => {
+
     const contactContext = useContext(ContactContext);
+    const {addContact, clearCurrent, current, updateContact} = contactContext;
+
+    useEffect(()=> {
+        if(current !==null){
+            setContact(current);  // setContactt will fill the form with the value in the current
+        }
+        else{
+            setContact({
+                name: '',
+                email:'',
+                phone:'',
+                type: 'Personal'    // default value
+    
+            });
+        }
+    }, [contactContext, current]); // we  only want this to happen if the contactContext or current value changed
     const [contact, setContact] = useState({ 
         // we will have a state which will be an object and conatians all the fields
         name: '',
         email:'',
         phone:'',
-        type: 'personal'    // default value
+        type: 'Personal'    // default value
     });
     //defining haschanged
     
@@ -19,15 +38,18 @@ const ContactForm = () => {
 
     const hasSubmit = e =>{
         e.preventDefault();  // to prevent the default
-        contactContext.addContact(contact); // contact represent the state rightnow and addContact function is place at ContactState.js
-        // now we need to clear the form up
-        setContact({
-            name: '',
-            email:'',
-            phone:'',
-            type: 'personal'    // default value
-
-        });
+        if(current === null){
+            addContact(contact); // contact represent the state rightnow and addContact function is place at ContactState.js
+        } else { // update contact is defined in the ContactState
+            updateContact(contact); // contact here is what ever is in the form
+        }
+        clearAll();
+    }
+    
+    
+// clearing the form fields
+    const clearAll = () =>{
+        clearCurrent();
     }
  
     // now let's pull these values out of contact
@@ -35,7 +57,7 @@ const ContactForm = () => {
     return (
         // value of {name}, {email}, {phone}, {type} has benn taken out of the state coming from the destructed value
         <form onSubmit ={hasSubmit}>
-            <h2 className="text-primary">Add Contact</h2>
+            <h2 className="text-primary">{current? 'Edit Contact':'Add Contact'}</h2>
             <input type = "text" 
             placeholder="Name" 
             name="name" 
@@ -55,11 +77,14 @@ const ContactForm = () => {
             onChange={hasChanged}
             /> 
             <h5>Contact Type</h5>
-            <input type="radio" name="type" value="personal" checked={type==='personal'} onChange={hasChanged}/> {' '} Personal {' '}
+            <input type="radio" name="type" value="Personal" checked={type==='Personal'} onChange={hasChanged}/> {' '} Personal {' '}
             <input type="radio" name="type" value="Professional" checked={type==='Professional'} onChange={hasChanged}/> {' '} Professional 
             <div>
-            <input type="submit" value="Add Contact" className="btn btn-primary btn-block"></input>
+            <input type="submit" value={current? 'Update Contact':'Add Contact'} className="btn btn-primary btn-block"></input>
             </div>
+            {current && <div>
+                <button className='btn btn-light btn-block' onClick={clearAll}>Clear</button>
+                </div>}
         </form>
     )
 }
