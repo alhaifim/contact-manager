@@ -43,6 +43,19 @@ import {
                   ...state, // we return our current state 
                   current: null
               }
+              case FILTER_CONTACTS:
+                  return {
+                      ...state,
+                      filtered: state.contacts.filter(contact => { // running the filter method on all the contacts
+                          const regex = new RegExp(`${action.payload}`, 'gi');  // regex is going to match the text coming in.  gi is global insenstive means it is not case sensitive
+                          return contact.name.match(regex) || contact.email.match(regex); // that will return anything where the name matches the text that is passed in
+                      }) 
+                  };
+                  case CLEAR_FILTER:
+                        return  {
+                              ...state, // we return our current state 
+                              filtered: null
+                          }
           default:
               return state;
       }

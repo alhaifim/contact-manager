@@ -45,7 +45,8 @@ const ContactState = props => {
                     }
         ],
         // what will happen is when edit is clicked the contact being edited to be stored at current 
-        current: null
+        current: null,
+        filtered: null
     };
 // state allows us to access anything in our state and dispatch to send objects to the reducer
 const [ state, dispatch]   = useReducer(contactReducer, initialState);
@@ -80,8 +81,14 @@ const [ state, dispatch]   = useReducer(contactReducer, initialState);
     };
 
     //Filter Contacts
+    const filterContacts = text => {
+        dispatch({type: FILTER_CONTACTS, payload: text}); // dispatch to reducer.  let's save and go to our reducer 
+    };
 
     //Clear Filter
+    const clearFilter = () => { // this one does not take any contact and does not send a payload as we want it to be null
+        dispatch({type: CLEAR_FILTER}); // dispatch to reducer.  let's save and go to our reducer 
+    };
 
     // now we need to return our provider so that we can wrap our entire application with this context
     return(
@@ -90,11 +97,14 @@ const [ state, dispatch]   = useReducer(contactReducer, initialState);
             // anything we want to access from other components including states and actions need to go in here
             contacts: state.contacts,
             current: state.current, // new pice of state 
+            filtered: state.filtered,
             addContact, 
             deleteContact,
             setCurrent,
             clearCurrent,
-            updateContact
+            updateContact,
+            filterContacts,
+            clearFilter
         }}
         >
         {props.children}
