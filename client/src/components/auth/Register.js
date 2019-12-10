@@ -1,12 +1,26 @@
 // this will be a form with a few fields so I am using useState hook to add a component level state
-import React, {useState, useContext} from 'react';
+import React, {useState, useContext, useEffect} from 'react';
 import AlertContext from '../../context/alert/alertContext';
+import AuthContext from '../../context/auth/authContext';
 
 
 const Register = () => {
     const alertContext = useContext(AlertContext);
+    const authContext = useContext(AuthContext);
 
     const {setAlert} = alertContext;
+    const {register, error, clearErrors} = authContext; // taking register function from AuthState
+
+    useEffect(()=> {
+        if
+        (error ==='User already exists'){
+            setAlert(error, 'danger');
+            clearErrors();
+
+        }
+    }, [error]); // we want this to run when the error is added to the state 
+
+
 
 
     const [user, setUser] = useState({
@@ -28,7 +42,11 @@ const Register = () => {
         } else if(password !==password2){
             setAlert('Passwords do not match', 'danger');
         } else {
-            console.log('Register Submit');
+            register ({ // register will take the following form data 
+                name,
+                email,
+                password
+            });
         }
         
     };

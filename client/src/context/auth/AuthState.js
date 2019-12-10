@@ -1,5 +1,6 @@
 import React, { useReducer } from 'react';
 import AuthContext from './authContext';
+import axios from 'axios';
 import authReducer from './authReducer';
 import {
     REGISTER_SUCCESS,
@@ -29,13 +30,37 @@ const [ state, dispatch]   = useReducer(authReducer, initialState);
 //Load User
 
 //Register User
+const register = async formData => { // as we are making a post request and sending data we need the content type header of application json
+    //to do that with axiom 
+    const config = {
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    }
+    try{
+        const res = await axios.post('/api/users', formData, config);  //as we have a proxy value in package.json for http://localhost:5000
+        dispatch({
+            type: REGISTER_SUCCESS,
+            payload: res.data    //response is going to be the token
+        });
+   
+    }catch (err){
+        dispatch({
+            type: REGISTER_FAIL,
+            payload: err.response.data.msg 
+        })
+    }
 
+}
 //Login User
 
 // Logout .  which will destory the token
 
 //Clear Errors
 
+const clearErrors = ()=>dispatch({ // to the reducers 
+    type: CLEAR_ERRORS
+});
 
 
   
@@ -48,7 +73,9 @@ const [ state, dispatch]   = useReducer(authReducer, initialState);
             isAuthenticated: state.isAuthenticated,
             loading: state.loading,
             user: state.user,
-            error: state.error   
+            error: state.error, 
+            register,
+            clearErrors
         }}
         >
         {props.children}
