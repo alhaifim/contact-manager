@@ -2,6 +2,7 @@ import React, { useReducer } from 'react';
 import AuthContext from './authContext';
 import axios from 'axios';
 import authReducer from './authReducer';
+import setAuthToken from '../../utils/setAuthToken';
 import {
     REGISTER_SUCCESS,
     REGISTER_FAIL,
@@ -28,6 +29,26 @@ const [ state, dispatch]   = useReducer(authReducer, initialState);
 // now we will be having all of our actions.  Actions will communicate with contact form
 
 //Load User
+const loadUser = async ()=> {
+// we need to set the token into a global header within axios so that we do not have to define it for everyfunction
+if(localStorage.token){ // check if there is token.  we need to load it in the app.js
+    setAuthToken(localStorage.token);
+}
+try{
+    // check token and see if it is a valid user
+    const res = await axios.get('/api/auth');
+    dispatch({type: USER_LOADED,
+         payload: res.data
+        });
+
+}catch(err){
+    dispatch({type: AUTH_ERROR}); // now we move to auth reducer and we define it in the provider 
+
+}
+
+
+
+}
 
 //Register User
 const register = async formData => { // as we are making a post request and sending data we need the content type header of application json
@@ -43,6 +64,8 @@ const register = async formData => { // as we are making a post request and send
             type: REGISTER_SUCCESS,
             payload: res.data    //response is going to be the token
         });
+
+        loadUser();
    
     }catch (err){
         dispatch({
@@ -75,7 +98,8 @@ const clearErrors = ()=>dispatch({ // to the reducers
             user: state.user,
             error: state.error, 
             register,
-            clearErrors
+            clearErrors,
+            loadUser
         }}
         >
         {props.children}

@@ -1,7 +1,7 @@
 import {
     REGISTER_SUCCESS,
     REGISTER_FAIL,
-    USER_LOADER,
+    USER_LOADED,
     AUTH_ERROR,
     LOGIN_SUCCESS,
     LOGIN_FAIL,
@@ -11,7 +11,15 @@ import {
 
 export default (state, action)=> {
     switch(action.type){
-            // if there is a register success we want to return the token inside the local storage
+        case USER_LOADED:    
+            return {
+                ...state, 
+                isAuthenticated: true,
+                loading: false,
+                user: action.payload
+            }
+        
+        // if there is a register success we want to return the token inside the local storage
         case REGISTER_SUCCESS:
             localStorage.setItem('token', action.payload.token);
             return {
@@ -21,6 +29,7 @@ export default (state, action)=> {
                 loading: false
             };
         case REGISTER_FAIL:     
+        case AUTH_ERROR:
         //we need to remove the token from the storage
         localStorage.removeItem('token');
         return {

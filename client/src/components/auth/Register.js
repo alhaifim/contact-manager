@@ -4,21 +4,26 @@ import AlertContext from '../../context/alert/alertContext';
 import AuthContext from '../../context/auth/authContext';
 
 
-const Register = () => {
+const Register = (props) => {
     const alertContext = useContext(AlertContext);
     const authContext = useContext(AuthContext);
 
     const {setAlert} = alertContext;
-    const {register, error, clearErrors} = authContext; // taking register function from AuthState
+    const {register, error, clearErrors, isAuthenticated } = authContext; // taking register function from AuthState
 
     useEffect(()=> {
-        if
-        (error ==='User already exists'){
+      if(isAuthenticated){
+          // to redirect in react we need to use props.history.push
+          props.history.push('/');  // redirect to the homepage "dashboard"
+      }
+      
+        if(error ==='User already exists'){
             setAlert(error, 'danger');
             clearErrors();
 
         }
-    }, [error]); // we want this to run when the error is added to the state 
+       // eslint-disable-next-line 
+    }, [error, isAuthenticated, props.history]); // we want this to run when the error is added to the state
 
 
 
