@@ -21,9 +21,6 @@ const Navbar = ({title, icon}) => {
             <i className='fas fa-sign-out-alt'></i><span className="hide-sm">Logout</span>
             </a>
             </li>
-            <li>
-              <Link to ='/about'> About</Link>
-        </li>
         
         </Fragment>
     );
