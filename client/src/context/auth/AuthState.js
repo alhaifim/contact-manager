@@ -98,6 +98,7 @@ const login= async formData => { // as we are making a post request and sending 
 
 }
 // Logout .  which will destory the token
+const logout = () => {dispatch({type: LOGOUT})};
 
 //Clear Errors
 
@@ -120,7 +121,8 @@ const clearErrors = ()=>dispatch({ // to the reducers
             register,
             clearErrors,
             loadUser, 
-            login
+            login,
+            logout
 
         }}
         >
