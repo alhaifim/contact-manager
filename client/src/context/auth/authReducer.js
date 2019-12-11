@@ -21,6 +21,7 @@ export default (state, action)=> {
         
         // if there is a register success we want to return the token inside the local storage
         case REGISTER_SUCCESS:
+        case LOGIN_SUCCESS:
             localStorage.setItem('token', action.payload.token);
             return {
                 ...state, // current state
@@ -30,6 +31,7 @@ export default (state, action)=> {
             };
         case REGISTER_FAIL:     
         case AUTH_ERROR:
+        case LOGIN_FAIL:
         //we need to remove the token from the storage
         localStorage.removeItem('token');
         return {

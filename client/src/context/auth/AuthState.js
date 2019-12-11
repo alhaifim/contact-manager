@@ -45,9 +45,6 @@ try{
     dispatch({type: AUTH_ERROR}); // now we move to auth reducer and we define it in the provider 
 
 }
-
-
-
 }
 
 //Register User
@@ -76,7 +73,30 @@ const register = async formData => { // as we are making a post request and send
 
 }
 //Login User
+const login= async formData => { // as we are making a post request and sending data we need the content type header of application json
+    //to do that with axiom 
+    const config = {
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    }
+    try{
+        const res = await axios.post('/api/auth', formData, config);  //as we have a proxy value in package.json for http://localhost:5000
+        dispatch({
+            type: LOGIN_SUCCESS,
+            payload: res.data    //response is going to be the token
+        });
 
+        loadUser();
+   
+    }catch (err){
+        dispatch({
+            type: LOGIN_FAIL,
+            payload: err.response.data.msg 
+        })
+    };
+
+}
 // Logout .  which will destory the token
 
 //Clear Errors
@@ -99,7 +119,9 @@ const clearErrors = ()=>dispatch({ // to the reducers
             error: state.error, 
             register,
             clearErrors,
-            loadUser
+            loadUser, 
+            login
+
         }}
         >
         {props.children}
