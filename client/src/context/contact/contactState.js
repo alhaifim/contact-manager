@@ -1,5 +1,5 @@
 import React, { useReducer } from 'react';
-import uuid from 'uuid';
+import axios from 'axios';
 import ContactContext from './contactContext';
 import contactReducer from './contactReducer';
 import {
@@ -17,36 +17,12 @@ import {
 // declare our intial state
 
 const ContactState = props => {
-    const initialState ={
-        contacts: [
-                    {
-                        id:1,
-                        name: 'Jill Johnson',
-                        email: 'jill@gmail.com',
-                        phone: '111-111-1111',
-                        type: 'personal'
-
-                    },
-                    {
-                        id:2,
-                        name: 'Sara Waston',
-                        email: 'sara@gmail.com',
-                        phone: '222-222-2222',
-                        type: 'personal'
-
-                    },
-                    {
-                        id:3,
-                        name: 'Harry White',
-                        email: 'harry@gmail.com',
-                        phone: '333-333-3333',
-                        type: 'professional'
-
-                    }
-        ],
+    const initialState ={ // all of these states initial should be passed to the provider
+        contacts: [],
         // what will happen is when edit is clicked the contact being edited to be stored at current 
         current: null,
-        filtered: null
+        filtered: null, 
+        error: null 
     };
 // state allows us to access anything in our state and dispatch to send objects to the reducer
 const [ state, dispatch]   = useReducer(contactReducer, initialState);
@@ -54,11 +30,20 @@ const [ state, dispatch]   = useReducer(contactReducer, initialState);
 // now we will be having all of our actions.  Actions will communicate with contact form
    
     //Add Contact
-    const addContact = contact => {
-        contact.id = uuid.v4();    // this is temp until we connect mongoDB
-        dispatch({type: ADD_CONTACT, payload: contact}); // dispatch to reducer.  let's save and go to our reducer 
+    const addContact = async contact => {
+        const config = {
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }
+        try {
+            const res = await axios.post('/api/contacts', contact, config);
+            dispatch({type: ADD_CONTACT, payload: contact}); // dispatch to reducer.  let's save and go to our reducer
+        }catch(err){
+            dispatch({type: CONTACT_ERROR, payload: err.response.msg});
 
-    }
+        }
+    };
     
     //Delete Contact
     const deleteContact = id => {
@@ -98,6 +83,7 @@ const [ state, dispatch]   = useReducer(contactReducer, initialState);
             contacts: state.contacts,
             current: state.current, // new pice of state 
             filtered: state.filtered,
+            error: state.error,
             clearFilter,
             addContact, 
             deleteContact,

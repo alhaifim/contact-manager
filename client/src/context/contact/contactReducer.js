@@ -56,6 +56,11 @@ import {
                               ...state, // we return our current state 
                               filtered: null
                           };
+                  case CONTACT_ERROR:
+                      return {
+                          ...state,
+                          error: action.payload
+                      };
           default:
               return state;
       }
