@@ -67,6 +67,23 @@ const [ state, dispatch]   = useReducer(contactReducer, initialState);
         }
    
     };
+
+        //Update Contact
+        const updateContact = async contact => {
+            const config = {
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            }
+            try {
+                const res = await axios.put(`/api/contacts/${contact._id}`, contact, config);
+                dispatch({type: UPDATE_CONTACT, payload: res.data}); // dispatch to reducer.  let's save and go to our reducer 
+            }catch(err){
+                dispatch({type: CONTACT_ERROR, payload: err.response.msg});
+            }
+        };
+
+
     //clear Contacts 
     const clearContacts = () => {
         dispatch({type: CLEAR_CONTACTS});
@@ -81,11 +98,6 @@ const [ state, dispatch]   = useReducer(contactReducer, initialState);
         const clearCurrent = () => { // this one does not take any contact and does not send a payload as we want it to be null
             dispatch({type: CLEAR_CURRENT}); // dispatch to reducer.  let's save and go to our reducer 
         };
-
-    //Update Contact
-    const updateContact = contact => {
-        dispatch({type: UPDATE_CONTACT, payload: contact}); // dispatch to reducer.  let's save and go to our reducer 
-    };
 
     //Filter Contacts
     const filterContacts = text => {

@@ -31,7 +31,7 @@ import {
               return {
                   ...state,
                   contacts: state.contacts.map(contact=>
-                    contact.id === action.payload.id ? action.payload: contact),  // loop through the contact and if it matches the id 
+                    contact._id === action.payload._id ? action.payload: contact),  // loop through the contact and if it matches the id 
                     // in the paylod then set it to the values in the payload otherwise keep it as is
                     loading: false
               };
