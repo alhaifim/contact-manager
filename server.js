@@ -7,7 +7,7 @@ const path = require("path");
 
 // initialize express into a variable called APP
 const app = express();
-
+//
 // connect to data base 
 connectDB();
 
