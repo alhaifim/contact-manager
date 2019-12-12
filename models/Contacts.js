@@ -30,4 +30,4 @@ date: {
     default: Date.now
 }
 });
-module.exports = mongoose.model('Contact', ContactSchema); 
+module.exports = mongoose.model('contact', ContactSchema); 
