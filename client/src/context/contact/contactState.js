@@ -49,7 +49,7 @@ const [ state, dispatch]   = useReducer(contactReducer, initialState);
         }
         try {
             const res = await axios.post('/api/contacts', contact, config);
-            dispatch({type: ADD_CONTACT, payload: contact}); // dispatch to reducer.  let's save and go to our reducer
+            dispatch({type: ADD_CONTACT, payload: res.data}); // dispatch to reducer.  let's save and go to our reducer
         }catch(err){
             dispatch({type: CONTACT_ERROR, payload: err.response.msg});
 
