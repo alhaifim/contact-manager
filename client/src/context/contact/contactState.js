@@ -57,8 +57,15 @@ const [ state, dispatch]   = useReducer(contactReducer, initialState);
     };
     
     //Delete Contact
-    const deleteContact = id => {
-        dispatch({type: DELETE_CONTACT, payload: id}); // dispatch to reducer.  let's save and go to our reducer 
+    const deleteContact = async id => {
+        try {
+            await axios.delete(`/api/contacts/${id}`);
+            dispatch({type: DELETE_CONTACT, payload: id}); // dispatch to reducer.  let's save and go to our reducer 
+        }catch(err){
+            dispatch({type: CONTACT_ERROR, payload: err.response.msg});
+
+        }
+   
     };
     //clear Contacts 
     const clearContacts = () => {

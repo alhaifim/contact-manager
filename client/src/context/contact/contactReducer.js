@@ -23,7 +23,7 @@ import {
           
           return{
               ...state,                    //...state represent the current state
-              contacts: [...state.contacts, action.payload],  // can't change state as it is immutable, so what we do is we copy it
+              contacts: [action.payload,...state.contacts],  // can't change state as it is immutable, so what we do is we copy it
               // and then add the data we have have in our payload
               loading: false
           }
@@ -38,7 +38,7 @@ import {
           case DELETE_CONTACT:
               return {
                ...state,  
-               contacts: state.contacts.filter(contact => contact.id !== action.payload), // filter means 
+               contacts: state.contacts.filter(contact => contact._id !== action.payload), // filter means 
                //exclude where contact is not equlal to action.payload
                loading: false
           }

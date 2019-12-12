@@ -8,10 +8,10 @@ const ContactItem = ({contact}) => {
     // intialize contextcontact as we are importing that
     const contactContext = useContext(ContactContext); // now bring useContext hook
     const {deleteContact, setCurrent, clearCurrent} = contactContext;   // Pulling deleteContact, setCurrent action through contactContext
-    const {id, name, email, phone, type} = contact; // we are pulling that from the contact prop we just passed on
+    const {_id, name, email, phone, type} = contact; // we are pulling that from the contact prop we just passed on
     
     const onDelete = () =>{
-        deleteContact(id); // deleteContact is defined in ContactState.js 
+        deleteContact(_id); // deleteContact is defined in ContactState.js 
         clearCurrent();
     }
 
