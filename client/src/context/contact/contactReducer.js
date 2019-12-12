@@ -13,26 +13,44 @@ import {
 
   export default (state, action) => {
       switch(action.type){
+          case GET_CONTACTS:
+              return {
+                  ...state,
+                  contacts: action.payload,  //fill the contacts with the action payload
+                  loading: false
+              }
           case ADD_CONTACT: 
+          
           return{
               ...state,                    //...state represent the current state
-              contacts: [...state.contacts, action.payload]  // can't change state as it is immutable, so what we do is we copy it
+              contacts: [...state.contacts, action.payload],  // can't change state as it is immutable, so what we do is we copy it
               // and then add the data we have have in our payload
+              loading: false
           }
           case UPDATE_CONTACT:
               return {
                   ...state,
                   contacts: state.contacts.map(contact=>
-                    contact.id === action.payload.id ? action.payload: contact)  // loop through the contact and if it matches the id 
+                    contact.id === action.payload.id ? action.payload: contact),  // loop through the contact and if it matches the id 
                     // in the paylod then set it to the values in the payload otherwise keep it as is
-
+                    loading: false
               };
           case DELETE_CONTACT:
               return {
                ...state,  
-               contacts: state.contacts.filter(contact => contact.id !== action.payload) // filter means 
+               contacts: state.contacts.filter(contact => contact.id !== action.payload), // filter means 
                //exclude where contact is not equlal to action.payload
+               loading: false
           }
+          case CLEAR_CONTACTS: // we need to set everything to default 
+              return{
+                  ...state,
+                  contacts: null,
+                  filtered: null,
+                  error: null,
+                  current: null
+
+              }
           case SET_CURRENT:
             return  {
                   ...state, // we return our current state 

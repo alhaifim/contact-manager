@@ -18,7 +18,7 @@ import {
 
 const ContactState = props => {
     const initialState ={ // all of these states initial should be passed to the provider
-        contacts: [],
+        contacts: null,
         // what will happen is when edit is clicked the contact being edited to be stored at current 
         current: null,
         filtered: null, 
@@ -28,7 +28,18 @@ const ContactState = props => {
 const [ state, dispatch]   = useReducer(contactReducer, initialState);
 
 // now we will be having all of our actions.  Actions will communicate with contact form
-   
+    // Get Contacts
+    const getContacts = async () => {
+         // we do not need a config coz we are one sending anydata, we are getting
+
+        try {
+            const res = await axios.get('/api/contacts');
+            dispatch({type: GET_CONTACTS, payload: res.data}); // dispatch to reducer.  let's save and go to our reducer
+        }catch(err){
+            dispatch({type: CONTACT_ERROR, payload: err.response.msg});
+        }
+    };
+    
     //Add Contact
     const addContact = async contact => {
         const config = {
@@ -48,7 +59,11 @@ const [ state, dispatch]   = useReducer(contactReducer, initialState);
     //Delete Contact
     const deleteContact = id => {
         dispatch({type: DELETE_CONTACT, payload: id}); // dispatch to reducer.  let's save and go to our reducer 
-    }
+    };
+    //clear Contacts 
+    const clearContacts = () => {
+        dispatch({type: CLEAR_CONTACTS});
+    };
 
     //Set Current Contact
     const setCurrent = contact => {
@@ -90,8 +105,9 @@ const [ state, dispatch]   = useReducer(contactReducer, initialState);
             setCurrent,
             clearCurrent,
             updateContact,
-            filterContacts
-            
+            filterContacts,
+            getContacts,
+            clearContacts
         }}
         >
         {props.children}

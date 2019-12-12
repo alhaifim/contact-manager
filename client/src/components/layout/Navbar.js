@@ -3,12 +3,16 @@ import {BrowserRouter as Router, Route, Switch} from 'react-router-dom';
 import AuthContext from '../../context/auth/authContext';
 import PropTypes from 'prop-types';
 import {Link} from 'react-router-dom';
+import ContactContext from '../../context/contact/contactContext';
 
 const Navbar = ({title, icon}) => {
     const authContext = useContext(AuthContext);
+    const contactContext = useContext(ContactContext);
     const {isAuthenticated, logout, user} = authContext;
+    const {clearContacts} = contactContext; // bring clearContact function from ContactState via contactContext
     const onLogout =()=>{
         logout();
+        clearContacts(); // to clear contacts on logout
     }
     const authLinks = (
         // links are divided based on if you are logged in or not 
